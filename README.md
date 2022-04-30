@@ -18,13 +18,17 @@ Let's say, there is one stock "S" on the market. The stock "S" starts at price P
 
 Assume:
 1. Pa, Pb is always in our grid range. 
-2. We set the price ratio of one grid as (1+r), which means the upper grid of price Pa is (1+r)Pa
-3. Arithmetic grid 
+2. Arithmetic grid. So, the grid width of one level is r
 
-So the average trading cost is:
-$$ (Pa(1+r) + Pb) * 0.5$$
 
-the total position is:
+So, the average trading cost is:$$ (Pa + r + Pb) * 0.5$$; the total position size is: floor(abs(pb - pa) / r)
+
+
+<!-- 2. We set the price ratio of one grid as (1+r), which means the upper grid of price Pa is (1+r)Pa
+3.  -->
+
+
+Assume the price follows geometric brownien motion. If there is no drift and the volatility equals \sigma, what would be the expection of grid trading returns.  
 
 
 
