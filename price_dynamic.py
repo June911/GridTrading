@@ -5,7 +5,7 @@ inputs = {
     "X0": 100,
     "T": 1,
     "mu": 0,
-    "sigma": 0.01,
+    "sigma": 0.1,
     "N": 1000,
     "seed": 1,
     "interval_number": 100,
