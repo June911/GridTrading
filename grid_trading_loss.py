@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
+from torch import sign
+
 from helpful_scripts import get_results_path
 
 # start_price, end_price, r = 10, 14.5, 1
@@ -28,7 +30,7 @@ def get_grid_loss_v4(start_price, end_price, r):
         floor_end_position_price * con_end_price
         + ceil_end_position_price * (1 - con_end_price)
     )
-    sign_end_price = [1 if con else -1 for con in con_end_price]
+    sign_end_price = np.array([1 if con else -1 for con in con_end_price])
     average_position_price = (r * sign_end_price + end_position_price) * 0.5
 
     # if end_price >= start_price:
