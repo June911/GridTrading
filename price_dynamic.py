@@ -2,13 +2,13 @@ import numpy as np
 import time
 
 inputs = {
-    "X0": 100,
+    "X0": 10000,
     "T": 1,
     "mu": 0,
-    "sigma": 0.1,
-    "N": 1000,
+    "sigma": 0.001,
+    "N": 10000,
     "seed": 1,
-    "interval_number": 100,
+    "interval_number": 10000,
 }
 
 
@@ -35,10 +35,10 @@ def geometric_brownien_motion(inputs):
         np.random.seed(int(seed))
 
     # Calculate drift
-    drift = (mu - 0.5 * sigma**2) * dt
+    drift = (mu - 0.5 * sigma ** 2) * dt
 
     # Calculate diffusion
-    diffusion = sigma * dt**0.5
+    diffusion = sigma * dt ** 0.5
 
     # Generate random variables
     z = np.random.normal(size=(N, d))
