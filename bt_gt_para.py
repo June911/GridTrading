@@ -1,17 +1,18 @@
 from price_dynamic import *
 from bt_grid_trading import *
 from grid_trading_loss import *
-from IPython.utils import io
+from helpful_scripts import HiddenPrints
 
 import multiprocessing
 import matplotlib.pyplot as plt
+import time
 
 inputs = {
     "X0": 10000,
     "T": 0.083,
     "mu": 0,
     "sigma": 0.6,
-    "N": 1000,
+    "N": 100,
     "seed": 1,
     "interval_number": 100,
     # Grid trading parameters
@@ -36,7 +37,7 @@ def bt_gt(X):
         grid_quantity=0.01,
     )
 
-    with io.capture_output() as captured:  # this will supress (e.g. capture) stdout and stderr
+    with HiddenPrints():
         bt.run_on_bar()
 
     final_price = X[-1]
@@ -46,6 +47,9 @@ def bt_gt(X):
 
 
 def main():
+    # record start time
+    st_time = time.perf_counter()
+
     # init pool
     p = multiprocessing.Pool(multiprocessing.cpu_count() - 1)
 
@@ -53,7 +57,6 @@ def main():
     res = p.map(bt_gt, X)
     p.close()
     p.join()
-    # print(res)
 
     # results
     final_prices = np.round([i[0] for i in res])
@@ -73,7 +76,9 @@ def main():
     df_grouped["grouped_mean_price"] = grouped_df["final_prices"].mean()
     df_grouped["grouped_mean_profit"] = grouped_df["profits"].mean()
     df_grouped["grouped_mean_loss"] = get_grid_loss_v4(
-        inputs["X0"], df_grouped["grouped_mean_price"].values, one_grid,
+        inputs["X0"],
+        df_grouped["grouped_mean_price"].values,
+        one_grid,
     )
     df_grouped["grouped_grid_quantity"] = (
         df_grouped["grouped_mean_profit"] + df_grouped["grouped_mean_loss"]
@@ -81,22 +86,25 @@ def main():
 
     df_grouped.round().to_excel(os.path.join(get_results_path(), "bt_grouped.xlsx"))
 
+    # print(df_grouped)
+
     # grouped_mean_price = grouped_df["final_prices"].mean()
     # grouped_mean_profit = grouped_df["profits"].mean()
     # print(grouped_mean_price.describe())
     # mean_loss = get_grid_loss_v4(inputs["X0"], grouped_mean_price.values, 0.01)
 
     # print(df)
-    print(df_grouped)
     # print(2 * inputs["X0"] * inputs["r"] / inputs["n_grid"])
     # print(grouped_mean_price)
     # print(grouped_mean_profit)
     # print(mean_loss)
 
-    # print(f"The average profit is {np.round(np.mean(profits))}")
-    # print(f"The max profit is {np.max(profits)}")
-    # print(f"The min profit is {np.round(np.min(profits))}")
-    # print(f"The quantile is {profits_quantile}")
+    print("-" * 80)
+    print(f"The average profit is {np.round(np.mean(profits))}")
+    print(f"The max profit is {np.max(profits)}")
+    print(f"The min profit is {np.round(np.min(profits))}")
+    print(f"The quantile is {profits_quantile}")
+    print(f"Total time: {np.round(time.perf_counter() - st_time)} s")
 
 
 if __name__ == "__main__":

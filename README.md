@@ -10,6 +10,12 @@ Keypoints:
 3. So, the grid trading is a trade-off between 
 
 
+# Quick Start
+
+```
+pip install -r requirements.txt
+```
+
 
 #### The holding position is path-dependent, so is the potential lost
 
